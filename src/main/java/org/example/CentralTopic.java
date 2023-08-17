@@ -10,7 +10,7 @@ public class CentralTopic extends Topic {
     public CentralTopic(String title) {
         super(title);
         floatingChildren = new ArrayList<>();
-        relationship = new ArrayList<Relationship>();
+        relationship = new ArrayList<>();
     }
 
     private List<Topic> floatingChildren;
@@ -19,27 +19,23 @@ public class CentralTopic extends Topic {
         return floatingChildren;
     }
 
-    public void setFloatingChildren(List<Topic> floatingChildren) {
-        this.floatingChildren = floatingChildren;
-    }
-
     private List<Relationship> relationship;
 
     public List<Relationship> getRelationship() {
         return relationship;
     }
 
-    public void addRelationship(UUID tailId, UUID headId) {
+    public void addRelationship(String tailId, String headId) {
         this.relationship.add(new Relationship(tailId, headId));
     }
 
-    public void addRelationshipWithoutHead(UUID tailId) {
+    public void addRelationshipWithoutHead(String tailId) {
         var newFloatingTopic = new Topic("Floating Topic");
         this.addFloatingTopic(newFloatingTopic);
         addRelationship(tailId, newFloatingTopic.getId());
     }
 
-    public void addRelationshipWithoutTail(UUID headId) {
+    public void addRelationshipWithoutTail(String headId) {
         var newFloatingTopic = new Topic("Floating Topic");
         this.addFloatingTopic(newFloatingTopic);
         addRelationship(newFloatingTopic.getId(), headId);
@@ -82,73 +78,54 @@ public class CentralTopic extends Topic {
                 .collect(Collectors.toList());
     }
 
-    public void deleteSelectedRelationships(Relationship... selectedRelationships) {
-        removeRelationships(selectedRelationships);
-    }
-
-    void removeRelationships(Relationship... relationships) {
-        List<Relationship> relationshipsNeedToRemove = new ArrayList<>();
-        for (var item : relationships) {
-            relationshipsNeedToRemove.add(item);
-        }
-        this.traversalRelationships(relationshipsNeedToRemove);
-    }
-
-    void traversalRelationships(List<Relationship> relationshipsNeedToRemove) {
-        for (var item : this.getRelationship()) {
-            if (relationshipsNeedToRemove.contains(item)) {
-                this.deleteRelationship(item);
-                relationshipsNeedToRemove.remove(item);
-            }
-            item.traversalRelationships(relationshipsNeedToRemove);
-        }
-    }
-
     public void addFloatingTopic(Topic... subTopic) {
         for (var item : subTopic) {
             floatingChildren.add(item);
         }
     }
 
-    public void deleteFloatingTopic(Topic... floatingTopic) {
-        for (var item : floatingTopic) {
-            this.floatingChildren = removeTopic(item, this.floatingChildren);
+    public void deleteFloatingTopicById(String... floatingTopicId) {
+        for (var element : floatingTopicId) {
+            List<Topic> filteredTopics = floatingChildren.stream()
+                    .filter(item -> item.getId() != element)
+                    .collect(Collectors.toList());
+            this.floatingChildren = filteredTopics;
         }
     }
 
     public void moveFloatingTopicToSubtopic(Topic floatingTopic, Topic parentTopic) {
         parentTopic.addChildren(floatingTopic);
-        this.deleteFloatingTopic(floatingTopic);
+        this.deleteFloatingTopicById(floatingTopic.getId());
     }
 
     public void moveFloatingTopicToCentralTopic(Topic floatingTopic, CentralTopic centralTopic) {
         centralTopic.addChildren(floatingTopic);
-        this.deleteFloatingTopic(floatingTopic);
+        this.deleteFloatingTopicById(floatingTopic.getId());
     }
 
-    void removeFloatingTopics(Topic... topics) {
-        List<Topic> topicsNeedToRemove = new ArrayList<>();
-        for (var topic : topics) {
-            topicsNeedToRemove.add(topic);
+    void removeFloatingTopics(String... topicsId) {
+        List<String> topicsIdNeedToRemove = new ArrayList<>();
+        for (var topicId : topicsId) {
+            topicsIdNeedToRemove.add(topicId);
         }
-        this.traversalFloatingTopics(topicsNeedToRemove);
+        this.traversalFloatingTopics(topicsIdNeedToRemove);
     }
 
-    void traversalFloatingTopics(List<Topic> topicsNeedToRemove) {
+    void traversalFloatingTopics(List<String> topicsIdNeedToRemove) {
         for (var item : this.getFloatingChildren()) {
-            if (topicsNeedToRemove.contains(item)) {
-                this.deleteFloatingTopic(item);
-                topicsNeedToRemove.remove(item);
+            if (topicsIdNeedToRemove.contains(item.getId())) {
+                this.deleteFloatingTopicById(item.getId());
+                topicsIdNeedToRemove.remove(item.getId());
             }
-            item.traversal(topicsNeedToRemove);
+            item.traversal(topicsIdNeedToRemove);
         }
     }
 
-    public void deleteSelectedTopics(Topic... selectedTopics) {
+    public void deleteSelectedTopics(String... selectedTopicsId) {
         //Delete Children
-        removeTopics(selectedTopics);
+        removeTopics(selectedTopicsId);
 
         //Delete Floating Topic
-        removeFloatingTopics(selectedTopics);
+        removeFloatingTopics(selectedTopicsId);
     }
 }

@@ -4,41 +4,38 @@ import java.util.List;
 import java.util.UUID;
 
 public class Relationship {
-    private UUID id;
-    private UUID tailId;
-    private UUID headId;
+    private String id;
+    private String tailId;
+    private String headId;
 
 
-    public Relationship(UUID tailId, UUID headId) {
-        id = UUID.randomUUID();
+    public Relationship(String tailId, String headId) {
+        id = UUID.randomUUID().toString();
         this.tailId = tailId;
         this.headId = headId;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public UUID getTailId() {
+    public String getTailId() {
         return tailId;
     }
 
-    public void setTailId(UUID tailId) {
+    public void setTailId(String tailId) {
         this.tailId = tailId;
     }
 
-    public UUID getHeadId() {
+    public String getHeadId() {
         return headId;
     }
 
-    public void setHeadId(UUID headId) {
+    public void setHeadId(String headId) {
         this.headId = headId;
-    }
-
-    public void traversalRelationships(List<Relationship> relationshipsNeedToRemove) {
     }
 }

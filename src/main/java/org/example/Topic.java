@@ -7,14 +7,14 @@ import java.util.stream.Collectors;
 
 public class Topic {
     public Topic(String title) {
-        id = UUID.randomUUID();
+        id = UUID.randomUUID().toString();
         this.title = title;
-        children = new ArrayList<Topic>();
+        children = new ArrayList<>();
     }
 
-    private UUID id;
+    private String id;
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -74,16 +74,13 @@ public class Topic {
         }
     }
 
-    public void deleteChildren(Topic... subTopics) {
-        for (var item : subTopics) {
-            this.children = removeTopic(item, this.children);
+    public void deleteChildrenById(String... childrenId) {
+        for (var element : childrenId) {
+            List<Topic> filteredTopics = children.stream()
+                    .filter(item -> item.getId() != element)
+                    .collect(Collectors.toList());
+            this.children = filteredTopics;
         }
-    }
-
-    public static List<Topic> removeTopic(Topic topic, List<Topic> list) {
-        return list.stream()
-                .filter(item -> item != topic)
-                .collect(Collectors.toList());
     }
 
     public void orderTopic(Topic topicA, Topic topicB) {
@@ -95,29 +92,29 @@ public class Topic {
 
     public void moveTopicToTopic(Topic topic, Topic parentTopic) {
         parentTopic.addChildren(topic);
-        this.deleteChildren(topic);
+        this.deleteChildrenById(topic.getId());
     }
 
     public void moveTopicToBeFloatingTopic(Topic topic, CentralTopic centralTopic) {
         centralTopic.addFloatingTopic(topic);
-        this.deleteChildren(topic);
+        this.deleteChildrenById(topic.getId());
     }
 
-    void removeTopics(Topic... topics) {
-        List<Topic> topicsNeedToRemove = new ArrayList<>();
-        for (var topic : topics) {
-            topicsNeedToRemove.add(topic);
+    public void removeTopics(String... topicsId) {
+        List<String> topicsIdNeedToRemove = new ArrayList<>();
+        for (var topicId : topicsId) {
+            topicsIdNeedToRemove.add(topicId);
         }
-        this.traversal(topicsNeedToRemove);
+        this.traversal(topicsIdNeedToRemove);
     }
 
-    void traversal(List<Topic> topicsNeedToRemove) {
+    public void traversal(List<String> topicsIdNeedToRemove) {
         for (var item : this.getChildren()) {
-            if (topicsNeedToRemove.contains(item)) {
-                this.deleteChildren(item);
-                topicsNeedToRemove.remove(item);
+            if (topicsIdNeedToRemove.contains(item.getId())) {
+                this.deleteChildrenById(item.getId());
+                topicsIdNeedToRemove.remove(item.getId());
             }
-            item.traversal(topicsNeedToRemove);
+            item.traversal(topicsIdNeedToRemove);
         }
     }
 }

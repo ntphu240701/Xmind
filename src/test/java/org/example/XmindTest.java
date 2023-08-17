@@ -254,7 +254,7 @@ class XmindTest {
         assertEquals(1, subTopic1.getChildren().size());
 
         //Delete SubTopic
-        mainTopic1.deleteChildren(subTopic1);
+        mainTopic1.deleteChildrenById(subTopic1.getId());
 
         //After
         assertEquals(1, mainTopic1.getChildren().size());
@@ -273,10 +273,10 @@ class XmindTest {
         assertEquals(4, data.centralTopic.getChildren().size());
 
         //Delete MainTopic
-        data.centralTopic.deleteChildren(data.mainTopic4);
+        data.centralTopic.deleteChildrenById(data.mainTopic4.getId(), data.mainTopic1.getId());
 
         //After
-        assertEquals(3, data.centralTopic.getChildren().size());
+        assertEquals(2, data.centralTopic.getChildren().size());
     }
 
     @Test
@@ -291,7 +291,7 @@ class XmindTest {
         assertEquals(2, centralTopic.getFloatingChildren().size());
 
         //Delete FloatingTopic
-        centralTopic.deleteFloatingTopic(floatingTopic1);
+        centralTopic.deleteFloatingTopicById(floatingTopic1.getId());
 
         //After
         assertEquals(1, centralTopic.getFloatingChildren().size());
@@ -316,7 +316,7 @@ class XmindTest {
         assertEquals(1, subTopic31.getChildren().size());
 
         //Delete multiple Topics
-        data.centralTopic.deleteSelectedTopics(floatingTopic, data.mainTopic4, subsubTopic31);
+        data.centralTopic.deleteSelectedTopics(floatingTopic.getId(), data.mainTopic4.getId(), subsubTopic31.getId());
 
         //After
         assertEquals(0, data.centralTopic.getFloatingChildren().size());
@@ -472,16 +472,18 @@ class XmindTest {
 
         data.centralTopic.addRelationship(subTopic1.getId(), data.mainTopic2.getId());
         data.centralTopic.addRelationship(data.mainTopic3.getId(), subTopic2.getId());
+        data.centralTopic.addRelationship(data.mainTopic4.getId(), subTopic2.getId());
 
         //Before
-        assertEquals(2, data.centralTopic.getRelationship().size());
+        assertEquals(3, data.centralTopic.getRelationship().size());
         assertEquals(subTopic1.getId(), data.centralTopic.getRelationshipsOfTopic(subTopic1).get(0).getTailId());
         assertEquals(subTopic2.getId(), data.centralTopic.getRelationshipsOfTopic(data.mainTopic3).get(0).getHeadId());
+        assertEquals(subTopic2.getId(), data.centralTopic.getRelationshipsOfTopic(data.mainTopic4).get(0).getHeadId());
 
         //Delete Multiple Relationships
-        data.centralTopic.deleteSelectedRelationships(data.centralTopic.getRelationshipsOfTopic(subTopic1).get(0), data.centralTopic.getRelationshipsOfTopic(data.mainTopic3).get(0));
+        data.centralTopic.deleteRelationship(data.centralTopic.getRelationshipsOfTopic(subTopic1).get(0), data.centralTopic.getRelationshipsOfTopic(data.mainTopic3).get(0));
 
         //After
-        assertEquals(0, data.centralTopic.getRelationship().size());
+        assertEquals(1, data.centralTopic.getRelationship().size());
     }
 }
