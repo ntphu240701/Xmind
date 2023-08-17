@@ -100,21 +100,16 @@ public class Topic {
         this.deleteChildrenById(topic.getId());
     }
 
-    public void removeTopics(String... topicsId) {
-        List<String> topicsIdNeedToRemove = new ArrayList<>();
-        for (var topicId : topicsId) {
-            topicsIdNeedToRemove.add(topicId);
+    public void deleteChildrenNodes(String... nodeIds) {
+        for (var item : nodeIds) {
+            this.deleteChildrenById(item);
         }
-        this.traversal(topicsIdNeedToRemove);
     }
 
-    public void traversal(List<String> topicsIdNeedToRemove) {
-        for (var item : this.getChildren()) {
-            if (topicsIdNeedToRemove.contains(item.getId())) {
-                this.deleteChildrenById(item.getId());
-                topicsIdNeedToRemove.remove(item.getId());
-            }
-            item.traversal(topicsIdNeedToRemove);
+    public void deleteChildrenByIdSet(String... idSet) {
+        this.deleteChildrenNodes(idSet);
+        for (var item : this.children) {
+            item.deleteChildrenByIdSet(idSet);
         }
     }
 }

@@ -316,7 +316,7 @@ class XmindTest {
         assertEquals(1, subTopic31.getChildren().size());
 
         //Delete multiple Topics
-        data.centralTopic.deleteSelectedTopics(floatingTopic.getId(), data.mainTopic4.getId(), subsubTopic31.getId());
+        data.centralTopic.deleteTopicsByIds(floatingTopic.getId(), data.mainTopic4.getId(), subsubTopic31.getId());
 
         //After
         assertEquals(0, data.centralTopic.getFloatingChildren().size());

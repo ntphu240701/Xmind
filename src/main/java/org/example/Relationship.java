@@ -8,7 +8,6 @@ public class Relationship {
     private String tailId;
     private String headId;
 
-
     public Relationship(String tailId, String headId) {
         id = UUID.randomUUID().toString();
         this.tailId = tailId;

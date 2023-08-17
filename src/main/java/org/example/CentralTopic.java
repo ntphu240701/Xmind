@@ -103,29 +103,23 @@ public class CentralTopic extends Topic {
         this.deleteFloatingTopicById(floatingTopic.getId());
     }
 
-    void removeFloatingTopics(String... topicsId) {
-        List<String> topicsIdNeedToRemove = new ArrayList<>();
-        for (var topicId : topicsId) {
-            topicsIdNeedToRemove.add(topicId);
-        }
-        this.traversalFloatingTopics(topicsIdNeedToRemove);
-    }
-
-    void traversalFloatingTopics(List<String> topicsIdNeedToRemove) {
-        for (var item : this.getFloatingChildren()) {
-            if (topicsIdNeedToRemove.contains(item.getId())) {
-                this.deleteFloatingTopicById(item.getId());
-                topicsIdNeedToRemove.remove(item.getId());
-            }
-            item.traversal(topicsIdNeedToRemove);
+    public void deleteFloatingNodes(String... idSet) {
+        for (var item : idSet) {
+            this.deleteFloatingTopicById(item);
         }
     }
 
-    public void deleteSelectedTopics(String... selectedTopicsId) {
-        //Delete Children
-        removeTopics(selectedTopicsId);
+    public void deleteFloatingNodeByIdSet(String... idSet) {
+        this.deleteFloatingNodes(idSet);
+        for (var item : this.floatingChildren) {
+            item.deleteChildrenByIdSet(idSet);
+        }
+    }
 
-        //Delete Floating Topic
-        removeFloatingTopics(selectedTopicsId);
+    public void deleteTopicsByIds(String... idSet) {
+        //delete children
+        this.deleteChildrenByIdSet(idSet);
+        //delete floating
+        this.deleteFloatingNodeByIdSet(idSet);
     }
 }
