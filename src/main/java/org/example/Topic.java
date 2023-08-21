@@ -58,6 +58,16 @@ public class Topic {
         this.width = width;
     }
 
+    private String topicPosition = "";
+
+    public String getTopicPosition() {
+        return topicPosition;
+    }
+
+    public void setTopicPosition(String topicPosition) {
+        this.topicPosition = topicPosition;
+    }
+
     private List<Topic> children;
 
     public List<Topic> getChildren() {
@@ -71,7 +81,19 @@ public class Topic {
     public void addChildren(Topic... subTopics) {
         for (var item : subTopics) {
             children.add(item);
+            item.topicPosition = this.topicPosition;
+            arrangeTopic(item);
         }
+    }
+
+    public void arrangeTopic(Topic topic) {
+        if (this.children.size() > 4) {
+            topic.topicPosition = "left";
+            this.children.get(this.children.size() / 2).setTopicPosition("right");
+        } else if (this.children.size() < 3)
+            topic.setTopicPosition("right");
+        else
+            topic.setTopicPosition("left");
     }
 
     public void deleteChildrenById(String... childrenId) {
@@ -83,11 +105,10 @@ public class Topic {
         }
     }
 
-    public void orderTopic(Topic topicA, Topic topicB) {
-        int indexA = this.children.indexOf(topicA);
-        int indexB = this.children.indexOf(topicB);
-        this.children.set(indexA, topicB);
-        this.children.set(indexB, topicA);
+    public void orderTopic(Topic topicToMove, Topic targetTopic) {
+        var targetIndex = this.children.indexOf(targetTopic);
+        this.deleteChildrenById(topicToMove.getId());
+        this.children.add(targetIndex, topicToMove);
     }
 
     public void moveTopicToTopic(Topic topic, Topic parentTopic) {

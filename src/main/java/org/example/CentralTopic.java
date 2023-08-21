@@ -106,6 +106,7 @@ public class CentralTopic extends Topic {
     public void deleteFloatingNodes(String... idSet) {
         for (var item : idSet) {
             this.deleteFloatingTopicById(item);
+            this.getFloatingChildren().remove(item);
         }
     }
 

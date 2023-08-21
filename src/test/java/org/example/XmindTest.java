@@ -102,18 +102,40 @@ class XmindTest {
 
     @Test
     public void testOrderTopic() {
-        Result data = getData();
+        var mainTopic1 = new Topic("Main Topic 1");
+        var subTopic1 = new Topic("Subtopic 1");
+        var subTopic2 = new Topic("Subtopic 2");
+        var subTopic3 = new Topic("Subtopic 3");
+        var subTopic4 = new Topic("Subtopic 4");
+        var subTopic5 = new Topic("Subtopic 5");
+        var subTopic6 = new Topic("Subtopic 6");
+        var subTopic7 = new Topic("Subtopic 7");
+        var subTopic8 = new Topic("Subtopic 8");
+
+        mainTopic1.addChildren(subTopic1, subTopic2, subTopic3, subTopic4, subTopic5, subTopic6, subTopic7, subTopic8);
 
         //Before swap
-        assertEquals(0, data.centralTopic.getChildren().indexOf(data.mainTopic1));
-        assertEquals(3, data.centralTopic.getChildren().indexOf(data.mainTopic4));
+        assertEquals(0, mainTopic1.getChildren().indexOf(subTopic1));
+        assertEquals(1, mainTopic1.getChildren().indexOf(subTopic2));
+        assertEquals(2, mainTopic1.getChildren().indexOf(subTopic3));
+        assertEquals(3, mainTopic1.getChildren().indexOf(subTopic4));
+        assertEquals(4, mainTopic1.getChildren().indexOf(subTopic5));
+        assertEquals(5, mainTopic1.getChildren().indexOf(subTopic6));
+        assertEquals(6, mainTopic1.getChildren().indexOf(subTopic7));
+        assertEquals(7, mainTopic1.getChildren().indexOf(subTopic8));
 
         //Swap
-        data.centralTopic.orderTopic(data.mainTopic1, data.mainTopic4);
+        mainTopic1.orderTopic(subTopic5, subTopic2);
 
         //After swap
-        assertEquals(3, data.centralTopic.getChildren().indexOf(data.mainTopic1));
-        assertEquals(0, data.centralTopic.getChildren().indexOf(data.mainTopic4));
+        assertEquals(0, mainTopic1.getChildren().indexOf(subTopic1));
+        assertEquals(1, mainTopic1.getChildren().indexOf(subTopic5));
+        assertEquals(2, mainTopic1.getChildren().indexOf(subTopic2));
+        assertEquals(3, mainTopic1.getChildren().indexOf(subTopic3));
+        assertEquals(4, mainTopic1.getChildren().indexOf(subTopic4));
+        assertEquals(5, mainTopic1.getChildren().indexOf(subTopic6));
+        assertEquals(6, mainTopic1.getChildren().indexOf(subTopic7));
+        assertEquals(7, mainTopic1.getChildren().indexOf(subTopic8));
     }
 
     @Test
@@ -254,10 +276,11 @@ class XmindTest {
         assertEquals(1, subTopic1.getChildren().size());
 
         //Delete SubTopic
-        mainTopic1.deleteChildrenById(subTopic1.getId());
+        mainTopic1.deleteChildrenById(subTopic1.getId(), subTopic2.getId());
 
         //After
-        assertEquals(1, mainTopic1.getChildren().size());
+        assertEquals(0, mainTopic1.getChildren().size());
+        assertEquals(1, subTopic1.getChildren().size());
     }
 
     @Test
@@ -291,10 +314,10 @@ class XmindTest {
         assertEquals(2, centralTopic.getFloatingChildren().size());
 
         //Delete FloatingTopic
-        centralTopic.deleteFloatingTopicById(floatingTopic1.getId());
+        centralTopic.deleteFloatingTopicById(floatingTopic1.getId(), floatingTopic2.getId());
 
         //After
-        assertEquals(1, centralTopic.getFloatingChildren().size());
+        assertEquals(0, centralTopic.getFloatingChildren().size());
     }
 
     @Test
@@ -485,5 +508,27 @@ class XmindTest {
 
         //After
         assertEquals(1, data.centralTopic.getRelationship().size());
+    }
+
+    @Test
+    public void testMainTopicPosition() {
+        var centralTopic = new CentralTopic("Central Topic");
+        var mainTopic1 = new Topic("Main Topic 1");
+        var mainTopic2 = new Topic("Main Topic 2");
+        var mainTopic3 = new Topic("Main Topic 3");
+        var mainTopic4 = new Topic("Main Topic 4");
+        var mainTopic5 = new Topic("Main Topic 5");
+        var mainTopic6 = new Topic("Main Topic 6");
+        var mainTopic7 = new Topic("Main Topic 7");
+
+        centralTopic.addChildren(mainTopic1, mainTopic2, mainTopic3, mainTopic4, mainTopic5, mainTopic6, mainTopic7);
+
+        assertEquals("right", mainTopic1.getTopicPosition());
+        assertEquals("right", mainTopic2.getTopicPosition());
+        assertEquals("right", mainTopic3.getTopicPosition());
+        assertEquals("right", mainTopic4.getTopicPosition());
+        assertEquals("left", mainTopic5.getTopicPosition());
+        assertEquals("left", mainTopic6.getTopicPosition());
+        assertEquals("left", mainTopic7.getTopicPosition());
     }
 }
