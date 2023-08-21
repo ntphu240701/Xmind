@@ -80,9 +80,9 @@ public class Topic {
 
     public void addChildren(Topic... subTopics) {
         for (var item : subTopics) {
-            children.add(item);
             item.topicPosition = this.topicPosition;
             arrangeTopic(item);
+            children.add(item);
         }
     }
 

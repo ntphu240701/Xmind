@@ -125,14 +125,14 @@ class XmindTest {
         assertEquals(7, mainTopic1.getChildren().indexOf(subTopic8));
 
         //Swap
-        mainTopic1.orderTopic(subTopic5, subTopic2);
+        mainTopic1.orderTopic(subTopic2, subTopic4);
 
         //After swap
         assertEquals(0, mainTopic1.getChildren().indexOf(subTopic1));
-        assertEquals(1, mainTopic1.getChildren().indexOf(subTopic5));
-        assertEquals(2, mainTopic1.getChildren().indexOf(subTopic2));
-        assertEquals(3, mainTopic1.getChildren().indexOf(subTopic3));
-        assertEquals(4, mainTopic1.getChildren().indexOf(subTopic4));
+        assertEquals(1, mainTopic1.getChildren().indexOf(subTopic3));
+        assertEquals(2, mainTopic1.getChildren().indexOf(subTopic4));
+        assertEquals(3, mainTopic1.getChildren().indexOf(subTopic2));
+        assertEquals(4, mainTopic1.getChildren().indexOf(subTopic5));
         assertEquals(5, mainTopic1.getChildren().indexOf(subTopic6));
         assertEquals(6, mainTopic1.getChildren().indexOf(subTopic7));
         assertEquals(7, mainTopic1.getChildren().indexOf(subTopic8));
