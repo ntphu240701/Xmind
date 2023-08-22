@@ -125,7 +125,7 @@ class XmindTest {
         assertEquals(7, mainTopic1.getChildren().indexOf(subTopic8));
 
         //Swap
-        mainTopic1.orderTopic(subTopic2, subTopic4);
+        mainTopic1.reOrderTopic(subTopic2, subTopic4);
 
         //After swap
         assertEquals(0, mainTopic1.getChildren().indexOf(subTopic1));
@@ -519,16 +519,14 @@ class XmindTest {
         var mainTopic4 = new Topic("Main Topic 4");
         var mainTopic5 = new Topic("Main Topic 5");
         var mainTopic6 = new Topic("Main Topic 6");
-        var mainTopic7 = new Topic("Main Topic 7");
 
-        centralTopic.addChildren(mainTopic1, mainTopic2, mainTopic3, mainTopic4, mainTopic5, mainTopic6, mainTopic7);
+        centralTopic.addChildren(mainTopic1, mainTopic2, mainTopic3, mainTopic4, mainTopic5, mainTopic6);
 
         assertEquals("right", mainTopic1.getTopicPosition());
         assertEquals("right", mainTopic2.getTopicPosition());
         assertEquals("right", mainTopic3.getTopicPosition());
-        assertEquals("right", mainTopic4.getTopicPosition());
+        assertEquals("left", mainTopic4.getTopicPosition());
         assertEquals("left", mainTopic5.getTopicPosition());
         assertEquals("left", mainTopic6.getTopicPosition());
-        assertEquals("left", mainTopic7.getTopicPosition());
     }
 }

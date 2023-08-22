@@ -87,10 +87,10 @@ public class Topic {
     }
 
     public void arrangeTopic(Topic topic) {
-        if (this.children.size() > 4) {
+        if (this.children.size() >= 4) {
             topic.topicPosition = "left";
             this.children.get(this.children.size() / 2).setTopicPosition("right");
-        } else if (this.children.size() < 3)
+        } else if (this.children.size() < 2)
             topic.setTopicPosition("right");
         else
             topic.setTopicPosition("left");
@@ -105,7 +105,7 @@ public class Topic {
         }
     }
 
-    public void orderTopic(Topic topicToMove, Topic targetTopic) {
+    public void reOrderTopic(Topic topicToMove, Topic targetTopic) {
         var targetIndex = this.children.indexOf(targetTopic);
         this.deleteChildrenById(topicToMove.getId());
         this.children.add(targetIndex, topicToMove);
